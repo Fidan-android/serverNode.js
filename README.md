@@ -1,1 +1,1 @@
-# serverNode.js
+This a small example for newfags
