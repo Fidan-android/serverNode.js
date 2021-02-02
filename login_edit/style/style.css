@@ -1,0 +1,70 @@
+body {
+	font-family: Arial, sans-serif;
+	padding: 0;
+	margin: 0;
+	color: #222222;
+}
+
+a{
+	text-decoration: none;
+}
+.clearfix:after {
+	content:'';
+	display: table;
+	width: 100%;
+	clear: both;
+}
+
+div {
+	box-sizing: border-box;
+}
+.container {
+	width: 930px;
+	margin: 0 auto;
+}
+
+header{
+	background-color: #F15A31;
+	height: 11vh;
+}
+
+section{
+	background-color: #E1E5E6;
+	height: 80vh;
+}
+
+footer{
+	background-color: #F15A31;
+	height: 10vh;
+}
+
+.user_logo{
+	float:left;
+}
+
+.info h3{
+	font-size: 15px;
+	text-transform: uppercase;
+	margin-left: 60px;
+	margin-top: -4px;
+}
+
+.info p{
+	margin-top: -34px;
+	margin-left: 130px;
+}
+
+.name{
+	margin-left: 60px;
+	color:#fff;
+}
+
+.button_exit{
+	text-transform: uppercase;
+	color:#fff;
+	float:right;
+	padding-right: 30px;
+	font-size: 20px;
+	text-decoration: none;
+	margin-top: -50px;
+}

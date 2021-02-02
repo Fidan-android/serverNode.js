@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<title>ВХОД В СИСТЕМУ</title>
+	<link rel="shortcut icon" href="img/logo.png" type="image/x-png">
+	<link rel="stylesheet" href="style/main.css">
+  <!--<script type="text/javascript" src="js/script.js"></script>-->
+</head>
+<body>
+	<div class="container">
+    <div class="all">
+    	<img src="img/men.png">
+    	<form name="unexit">
+       		<div class="input_form">
+           		<input type="text" id="login" name="login" placeholder="Введите логин">
+              <div id="login_broked"></div>
+            	<div class="proverka">
+                <input type="password" id="password" name="password" placeholder="Введите пароль">
+                <a href="#" class="password-control" onclick="return show_hide_pas(this);"></a>
+              </div>
+              <div id="password_broked"></div>
+        	</div>
+        		<input class="go" type="submit" id="submit" name="submit" value="ВОЙТИ"><br/>
+    	</form>
+      <a href="http://127.0.0.1:3000/register">Зарегистрироваться</a>
+	</div>
+</div>
+</body>
+<script>
+  function show_hide_pas(target){
+    var input = document.getElementById('password');
+    if (input.getAttribute('type') == 'password') {
+      target.classList.add('view');
+      input.setAttribute('type', 'text');
+    } else {
+      target.classList.remove('view');
+      input.setAttribute('type', 'password');
+    }
+    return false;
+  }
+  document.getElementById('submit').addEventListener("click", function(e){
+    e.preventDefault();
+    let forma = document.forms["unexit"];
+    let login = forma.elements["login"].value;
+    let password = forma.elements["password"].value;
+    if(login == ""){
+      document.getElementById("login_broked").innerHTML = "<span style=\"color:red; vertical-align:10px;\">Это поле должно быть заполнено</span>";
+      setTimeout(function(){
+        document.getElementById("login_broked").textContent = "";
+      }, 3000);
+    } else {
+        if (password != ""){
+          let user = JSON.stringify({login: login, password: password});
+          let request = new XMLHttpRequest();
+          request.open("POST", "/login", true);
+          request.setRequestHeader("Content-Type", "application/json");
+          request.addEventListener("load", function(){
+            console.log(request.responseText);
+            switch(request.responseText){
+              case "Вход":{
+                forma.reset();
+                window.location.replace("http://127.0.0.1:3000/room");
+                break;
+              }
+
+              case "Неверный пароль":{
+                document.getElementById("password_broked").innerHTML = "<span style=\"color:red; vertical-align:10px;\">" + request.responseText + "</span>";
+                setTimeout(function(){
+                  document.getElementById("password_broked").textContent = "";
+                }, 3000);
+                break;
+              }
+
+              case "Пользователя не существует":{
+                document.getElementById("login_broked").innerHTML = "<span style=\"color:red; vertical-align:10px;\">" + request.responseText +
+                "</span>";
+                setTimeout(function(){
+                  document.getElementById("login_broked").textContent = "";
+                }, 3000);
+                break;
+              }
+
+              default:{
+                document.getElementById("login_broked").innerHTML = "<span style=\"color:red; vertical-align:10px;\">" + request.responseText +
+                "</span>";
+                setTimeout(function(){
+                  document.getElementById("login_broked").textContent = "";
+                }, 3000);
+                break;
+              }
+            }
+          });
+          request.send(user);
+        } else {
+            document.getElementById("password_broked").innerHTML = "<span style=\"color:red;vertical-align:10px;\">Пароль не должен быть пустым!</span>";
+            setTimeout(function(){
+              document.getElementById("password_broked").textContent = "";
+            }, 3000);
+          }
+      }
+  });
+</script>
+</html>

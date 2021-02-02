@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<title>ВХОД В СИСТЕМУ</title>
+	<link rel="shortcut icon" href="img/logo.png" type="image/x-png">
+	<link rel="stylesheet" href="style/css.css">
+</head>
+<body>
+	<div class="container">
+    <div class="all">
+    	<img src="img/men.png" class="men">
+    	<form name="registration" >
+       		<div class="input_form">
+           		<input type="text" id="email" name="email" placeholder="Введите email">
+              <div id="email_broked"></div>
+              <input type="text" id="login" name="login" placeholder="Введите логин">
+              <div id="login_broked"></div>
+              <div class="proverka">
+                <input type="password" id="password" name="password" placeholder="Введите пароль">
+                <a href="#" class="password-control" onclick="return show_hide_pas(this);"></a>  
+              </div>
+              <input type="password" id="password_repeat" name="password_repeat" placeholder="Подтвердите пароль">
+              <div id="password_broked"></div>
+          </div>
+        		<input class="go" type="submit" name="submit" id="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ"><br />
+    	</form>
+      <a href="http://127.0.0.1:3000/">Уже есть аккаунт?</a>
+      <script type="text/javascript">
+        function show_hide_pas(target){
+          var input = document.getElementById('password');
+          if (input.getAttribute('type') == 'password') {
+            target.classList.add('view');
+            input.setAttribute('type', 'text');
+          } else {
+            target.classList.remove('view');
+            input.setAttribute('type', 'password');
+          }
+          return false;
+        }
+
+
+        document.getElementById('submit').addEventListener("click", function(e){
+          e.preventDefault();
+          let forma = document.forms["registration"];
+          let email = forma.elements["email"].value;
+          let login = forma.elements["login"].value;
+          let password = forma.elements["password"].value;
+          let password_repeat = forma.elements["password_repeat"].value;
+          if(login == ""){
+            document.getElementById("login_broked").innerHTML = "<span style=\"color:red; vertical-align:10px;\">Это поле должно быть заполнено</span>";
+            setTimeout(function(){
+              document.getElementById("login_broked").textContent = "";
+            }, 3000);
+          } else {
+            if (email != ""){
+              if (password != ""){
+                if(password === password_repeat){
+                  let user = JSON.stringify({email: email, login: login, password: password, password_repeat: password_repeat});
+                  let request = new XMLHttpRequest();
+                  request.open("POST", "/register", true);
+                  request.setRequestHeader("Content-Type", "application/json");
+                  request.addEventListener("load", function(){
+                    //let _response = request.response;
+                    console.log(request.responseText);
+                    switch(request.responseText){
+                      case "Данная почта уже использована":{
+                        document.getElementById('email_broked').innerHTML = "<span style=\"color:red;vertical-align:10px;\">" + request.responseText + "</span>";
+                        setTimeout(function(){
+                          document.getElementById('email_broked').textContent = "";
+                        }, 3000);
+                        break;
+                      }
+
+                      case "Данный логин занят":{
+                        document.getElementById("login_broked").innerHTML = "<span style=\"color:red;vertical-align:10px;\">" + request.responseText + "</span>";
+                        setTimeout(function(){
+                          document.getElementById("login_broked").textContent = "";
+                        }, 3000);
+                        break;
+                      }
+                      default:{
+                        forma.reset();
+                        setTimeout('location.replace("http://127.0.0.1:3000/")', 1000);
+                        break;
+                      }
+                    }
+                  });
+                  request.send(user);
+                } else {
+                 document.getElementById("password_broked").innerHTML = "<span style=\"color:red;vertical-align:10px;\">Пароли не совпадают!</span>";
+                  setTimeout(function(){
+                    document.getElementById("password_broked").textContent = "";
+                  }, 3000);
+                }
+              } else {
+                document.getElementById("password_broked").innerHTML = "<span style=\"color:red;vertical-align:10px;\">Пароли не должны быть пустыми!</span>";
+                  setTimeout(function(){
+                    document.getElementById("password_broked").textContent = "";
+                  }, 3000);
+              }
+            } else {
+              document.getElementById("email_broked").innerHTML = "<span style=\"color:red;vertical-align:10px;\">Это поле должно быть заполнено!</span>";
+              setTimeout(function(){
+                document.getElementById("email_broked").textContent = "";
+              }, 4000);
+            }
+          }
+        });
+      </script>
+    </div>
+	</div>
+</body>
+</html>
